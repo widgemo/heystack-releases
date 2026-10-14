@@ -52,4 +52,4 @@ Run `~/heystack/bin/heystack-doctor` (or `docker compose exec heystack heystack-
 settings, the service, the database, the stored secrets and the backups and says what to do about each problem.
 
 **How do I get help or report a problem?**
-Email support@widgemo.com. Security problems: see [SECURITY.md](SECURITY.md).
+Open an [issue](https://github.com/widgemo/heystack-releases/issues/new/choose) and paste the output of `heystack-doctor --report` (it leaves out secrets, addresses and your home folder), or email support@widgemo.com. Security problems: see [SECURITY.md](SECURITY.md).

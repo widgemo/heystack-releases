@@ -16,7 +16,7 @@ macOS and other systems: unpack the package and follow `README.txt` inside it to
 Download `heystack-<version>.tar.gz` and `SHA256SUMS` from https://github.com/widgemo/heystack-releases/releases (no account needed) and check them:
 
 ```bash
-VERSION=0.13.0    # the newest version is at the top of the releases page
+VERSION=0.14.1    # the newest version is at the top of the releases page
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/heystack-$VERSION.tar.gz
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/SHA256SUMS
 sha256sum -c SHA256SUMS
@@ -40,7 +40,7 @@ Your connection address then looks like `postgresql://heystack:choose-a-password
 ./install.sh
 ```
 
-It checks your machine, asks the port (3001) and whether other computers may connect (default: no), and asks for the database address (typed hidden). Then it writes the settings, creates the database tables, installs a systemd user service called `heystack`, starts it and checks that it answers. At the end it prints:
+It checks your machine, asks you to accept the Heystack licence (read it in `LICENSE`; in a script use `--accept-license`, because `--yes` alone does not accept it), asks the port (3001) and whether other computers may connect (default: no), and asks for the database address (typed hidden). Then it writes the settings, creates the database tables, installs a systemd user service called `heystack`, starts it and checks that it answers. At the end it prints:
 
 - the address to open (for example `http://127.0.0.1:3001`),
 - a **one-time setup code** to create the first account,
@@ -115,6 +115,8 @@ Start with the doctor. It changes nothing; it checks the machine, the settings, 
 ~/heystack/bin/heystack-doctor          # a readable report
 ~/heystack/bin/heystack-doctor --json   # for scripts
 ```
+
+To ask for help, run `~/heystack/bin/heystack-doctor --report` and paste the output into an issue (https://github.com/widgemo/heystack-releases/issues/new/choose) or an email to support@widgemo.com. The report says what is installed and what the checks found, and leaves out secrets, passwords, addresses and your home folder (read it before you post it).
 
 The exit code is 0 when everything is fine, 1 with warnings and 2 when something needs fixing. For a Heystack that was not made by `install.sh`, point it at its settings file: `heystack-doctor --env-file /path/to/packages/api/.env --no-service`. What it checks:
 

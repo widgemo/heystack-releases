@@ -50,6 +50,7 @@ itself if the new version does not start), or `docker compose pull && docker com
 - [INSTALL.md](INSTALL.md): requirements, install, update, backups and restore, key rotation, troubleshooting
 - [DOCKER.md](DOCKER.md): running with Docker Compose
 - [FAQ.md](FAQ.md)
+- [BETA.md](BETA.md): what to try and how to tell us what is wrong
 - [PRIVACY.md](PRIVACY.md): what leaves your machine
 - [SECURITY.md](SECURITY.md): reporting a vulnerability
 
@@ -61,6 +62,7 @@ you may modify it locally for your own internal use. Full terms in [LICENSE](LIC
 third-party software it contains are in `THIRD-PARTY-NOTICES.txt` inside every download. By downloading, installing
 or using Heystack you accept the licence.
 
-## Support
+## Support and feedback
 
-support@widgemo.com
+Found a problem or have an idea? Open an [issue](https://github.com/widgemo/heystack-releases/issues/new/choose)
+(run `heystack-doctor --report` first and paste the output), or email support@widgemo.com.
