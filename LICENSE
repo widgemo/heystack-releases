@@ -1,0 +1,42 @@
+HEYSTACK LICENSE
+
+Copyright (c) 2026 Mark Enet. All rights reserved.
+
+"Heystack" means the software in this package or image (in source or compiled form), its documentation, and any updates you receive from the copyright holder. "Licensor" means Mark Enet. "You" means the individual or organization accepting this licence.
+
+Widgemo is a trade name / brand used by Mark Enet. It is not a separate legal entity. References to Widgemo in the software (including the About box), documentation, or marketing refer to Mark Enet doing business under that name.
+
+By downloading, installing, or using Heystack you accept this licence. If you do not accept it, do not download, install, or use Heystack.
+
+1. Grant. Subject to these terms, the Licensor grants you, free of charge, a limited, non-exclusive, non-transferable, non-sublicensable, revocable licence to download, install and run Heystack on machines you control, for your own use or for the internal use of your organization (including business use), for as long as you comply with these terms.
+
+2. What you may not do. Unless the Licensor agrees in writing, you may not:
+   (a) copy Heystack except as needed to install, run, back it up, or make local modifications permitted below;
+   (b) distribute, publish, sell, rent, lease, sublicense or otherwise make Heystack (or any modified version) available to anyone else;
+   (c) offer Heystack, or a service built on it, to third parties (for example as a hosted service);
+   (d) distribute any modified version or derivative work of Heystack;
+   (e) reverse engineer, decompile or disassemble it, except to the extent that applicable law allows this despite this restriction;
+   (f) remove or change any copyright, licence or attribution notice;
+   (g) use it to build a competing product.
+
+   You may make local modifications to Heystack solely for your own internal use on machines you control. Those modifications remain subject to this licence and may not be distributed.
+
+3. Ownership. Heystack is licensed, not sold. The Licensor keeps all rights, title and interest in Heystack, including all intellectual property rights. No rights are granted except those stated here. "Heystack" and "Widgemo" are trademarks or trade names of Mark Enet.
+
+4. Third-party components. Heystack contains third-party software that is licensed to you under its own terms, listed in THIRD-PARTY-NOTICES.txt. Those terms apply to those components and are not changed by this licence.
+
+5. Feedback. If you give the Licensor suggestions or feedback about Heystack, the Licensor may use them without restriction or payment.
+
+6. Your data. Heystack runs on your machines and stores its data there. The Licensor does not receive your data. Features you switch on yourself (for example AI queries, which send project information to the AI provider you configure) send data to the services you configure. See docs/privacy.md.
+
+7. No warranty. Heystack is provided "as is", without warranty of any kind, express or implied, including merchantability, fitness for a particular purpose, and non-infringement. Software can contain errors and may lose data: keep backups. Nothing in this licence excludes or limits any warranty or liability that cannot be excluded or limited under applicable law.
+
+8. Limitation of liability. To the extent permitted by law, the Licensor is not liable for any indirect, incidental, special, consequential or punitive damages, or for loss of data, profits or business, arising from the use of or inability to use Heystack, even if advised of the possibility. The Licensor's total liability for any claim is limited to the amount you paid for Heystack, or zero if you paid nothing. Nothing in this licence excludes or limits liability for fraud, gross negligence, or any other liability that cannot be excluded or limited under applicable law.
+
+9. Term and termination. This licence lasts until it is ended. The Licensor may end it at any time by notice to you (including by posting notice on the project website or download page). It ends automatically if you break these terms. When it ends you must stop using Heystack and delete all copies. Sections 2, 3, 4, 7, 8 and this section survive termination.
+
+10. Governing law and venue. This licence is governed by the laws of the Commonwealth of Massachusetts, without regard to conflict-of-law principles. Any dispute arising out of or relating to this licence shall be brought exclusively in the state or federal courts located in Massachusetts, and you consent to the personal jurisdiction of those courts.
+
+11. Contact. support@widgemo.com
+
+Last updated: 2026-10-14

@@ -1,0 +1,62 @@
+# Heystack with its own PostgreSQL, a daily backup, and everything kept in two volumes.
+#
+#   1. Create the .env file next to this one:
+#        printf 'POSTGRES_PASSWORD=%s\n' "$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')" > .env
+#   2. docker compose up -d
+#   3. docker compose logs heystack     (shows the one-time setup code for the first account)
+#   4. open http://localhost:3001
+#
+# Optional settings in .env: HEYSTACK_URL (the address people type in the browser, default http://localhost:3001),
+# HEYSTACK_PORT (the port on this machine, default 3001), HEYSTACK_BIND (127.0.0.1 = this machine only, which is the
+# default; 0.0.0.0 lets other computers connect: set HEYSTACK_URL to the address they use, and put a TLS proxy in front).
+# See docker/README.md.
+
+name: heystack
+
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: heystack
+      POSTGRES_DB: heystack
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?create the .env file first (see the top of this file)}
+    volumes:
+      - heystack-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U heystack -d heystack"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  heystack:
+    image: ${HEYSTACK_IMAGE:-ghcr.io/widgemo/heystack:latest}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://heystack:${POSTGRES_PASSWORD}@postgres:5432/heystack
+      HEYSTACK_ALLOWED_ORIGINS: ${HEYSTACK_URL:-http://localhost:3001}
+    ports:
+      - "${HEYSTACK_BIND:-127.0.0.1}:${HEYSTACK_PORT:-3001}:3001"
+    volumes:
+      - heystack-data:/data
+
+  # A backup right after start and then every 24 hours, into /data/backups (the newest 14 are kept).
+  backup:
+    image: ${HEYSTACK_IMAGE:-ghcr.io/widgemo/heystack:latest}
+    restart: unless-stopped
+    depends_on:
+      heystack:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://heystack:${POSTGRES_PASSWORD}@postgres:5432/heystack
+    volumes:
+      - heystack-data:/data
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["while true; do heystack-backup || true; sleep 86400; done"]
+
+volumes:
+  heystack-db:
+  heystack-data:
