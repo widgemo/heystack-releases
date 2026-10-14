@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security problem
+    url: https://github.com/widgemo/heystack-releases/blob/main/SECURITY.md
+    about: Please do not open a public issue for a security problem. Email support@widgemo.com instead.
+  - name: Something else, or you would rather not post publicly
+    url: mailto:support@widgemo.com
+    about: Email support@widgemo.com.

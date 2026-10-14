@@ -1,0 +1,34 @@
+name: Install or update problem
+description: The installer, Docker setup or an update did not work
+labels: ["install"]
+body:
+  - type: dropdown
+    id: how
+    attributes:
+      label: How did you install?
+      options:
+        - install.sh (Linux with systemd)
+        - Docker Compose
+        - By hand (any system)
+    validations:
+      required: true
+  - type: input
+    id: machine
+    attributes:
+      label: Machine
+      description: "For example: Raspberry Pi 5, Raspberry Pi OS 64-bit; or Ubuntu 24.04 on a PC."
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What did you run, and what happened?
+      description: Paste the last lines of the output. The installer never prints your database password or your encryption key after the first run, but check before posting.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Support report (if Heystack got installed)
+      description: "`~/heystack/bin/heystack-doctor --report` (versions before 0.14.1: `heystack-doctor` without `--report`)"
+      render: markdown

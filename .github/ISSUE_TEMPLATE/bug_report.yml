@@ -1,0 +1,29 @@
+name: Bug report
+description: Something does not work, or works wrongly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting it. The report below leaves out secrets, addresses and your home folder, but please read it before you post it.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: Steps to reproduce help most.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Support report
+      description: "Run `~/heystack/bin/heystack-doctor --report` (Docker: `docker compose exec heystack heystack-doctor --report`) and paste the output. If it says the option is unknown (versions before 0.14.1), run it without `--report` and paste that."
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log lines (optional)
+      description: "`journalctl --user -u heystack -n 50` (Docker: `docker compose logs --tail 50 heystack`). Remove anything private."
+      render: text
