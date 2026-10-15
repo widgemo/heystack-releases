@@ -16,7 +16,7 @@ macOS and other systems: unpack the package and follow `README.txt` inside it to
 Download `heystack-<version>.tar.gz` and `SHA256SUMS` from https://github.com/widgemo/heystack-releases/releases (no account needed) and check them:
 
 ```bash
-VERSION=0.15.0    # the newest version is at the top of the releases page
+VERSION=0.15.1    # the newest version is at the top of the releases page
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/heystack-$VERSION.tar.gz
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/SHA256SUMS
 sha256sum -c SHA256SUMS
