@@ -8,9 +8,14 @@ No. The source code is not published. You may not redistribute it, resell it, of
 modified versions of it; you may modify it locally for your own internal use. The licence text is in
 [LICENSE](LICENSE), and by downloading, installing or using Heystack you accept it.
 
+**How is this different from Coolify, Dokploy and similar tools?**
+They are container platforms that host your apps. Heystack assumes you already have a host (Vercel, GitHub Pages, ...) and
+adds a machine of your own for everything that is not production yet, with no containers. The comparison is in
+[README.md](README.md#how-it-compares); what Heystack does not do is in [LIMITATIONS.md](LIMITATIONS.md).
+
 **What do I need to run it?**
 A Linux machine and either Docker (PostgreSQL is included), or Node.js 20 or newer plus a PostgreSQL 15 or newer
-server (the installer uses one you already have; it never installs PostgreSQL). It runs on arm64 (Raspberry Pi)
+server (the installer uses one you already have; on Debian, Ubuntu and Raspberry Pi OS it can offer to install one for you, and only does so if you say yes). It runs on arm64 (Raspberry Pi)
 and amd64. macOS can run the package by hand (see README.txt inside the package); the installer is for Linux with
 systemd.
 

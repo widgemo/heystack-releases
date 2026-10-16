@@ -6,7 +6,7 @@ Heystack is a self-hosted developer dashboard. This guide installs the ready-to-
 
 - Linux with **systemd**, and a normal user account (do not run the installer as root).
 - **Node.js 20 or newer** (`node -v`).
-- **PostgreSQL 15 or newer**, already installed and running, plus its client tools (`psql`, `pg_dump`; on Debian/Ubuntu: `sudo apt install postgresql postgresql-client`). The installer never installs PostgreSQL for you. The client tools must be **the same version as the server or newer** (`pg_dump` refuses to back up a newer server): the installer and `heystack-doctor` tell you if they are not.
+- **PostgreSQL 15 or newer** and its client tools (`psql`, `pg_dump`). If you already have it, the installer uses it. If you do not, on Debian, Ubuntu and Raspberry Pi OS the installer **offers to install it for you** (see below); you can also install it yourself (`sudo apt install postgresql postgresql-client`). The client tools must be **the same version as the server or newer** (`pg_dump` refuses to back up a newer server): the installer and `heystack-doctor` tell you if they are not.
 - `curl`.
 
 macOS and other systems: unpack the package and follow `README.txt` inside it to start Heystack by hand.
@@ -16,7 +16,7 @@ macOS and other systems: unpack the package and follow `README.txt` inside it to
 Download `heystack-<version>.tar.gz` and `SHA256SUMS` from https://github.com/widgemo/heystack-releases/releases (no account needed) and check them:
 
 ```bash
-VERSION=0.17.0    # the newest version is at the top of the releases page
+VERSION=0.18.0    # the newest version is at the top of the releases page
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/heystack-$VERSION.tar.gz
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/SHA256SUMS
 sha256sum -c SHA256SUMS
@@ -25,6 +25,20 @@ cd heystack-$VERSION
 ```
 
 ## Create a database
+
+**No PostgreSQL yet? (Debian, Ubuntu, Raspberry Pi OS)** Run `./install.sh` and, when it finds no database, it explains what it would do and asks:
+
+```
+No PostgreSQL server answers on this machine.
+I can install it now with apt (Debian, Ubuntu and Raspberry Pi OS):
+  sudo apt-get install postgresql postgresql-client
+...
+Install postgresql postgresql-client now? [y/N]
+```
+
+Answer `y` and it installs PostgreSQL from your system's own packages (about 50 MB, started as a service), asks for your `sudo` password once for that step only, and makes a database user and a database just for Heystack, reachable from this machine only. The default is **no**: nothing is installed unless you say so, and everything else in the installer works without root. To say yes in advance (for a script), add `--install-postgres`; `--dry-run` shows what it would do. Prefer not to? Use a PostgreSQL you already have (below), or run Heystack with Docker.
+
+**Already have PostgreSQL?**
 
 Heystack needs an empty PostgreSQL database and a user for it. Either let the installer do it, or do it yourself:
 
@@ -55,6 +69,26 @@ Useful options (`./install.sh --help` lists all): `--prefix DIR` (default `~/hey
 ### Let other computers connect
 
 By default Heystack listens on this machine only. To reach it from another computer, answer yes when asked, or install with `--allow-network --address http://<this-machine>:3001`. Sign-in is on, but anything on your network can then reach the login page, so use a trusted network or put Heystack behind a reverse proxy or tunnel with HTTPS.
+
+## Reach your dev box from anywhere (Cloudflare Tunnel)
+
+By default Heystack answers on this machine only, which is safest. To open it from your laptop elsewhere, and (more important) to let **GitHub's webhooks reach it** so a push to `dev` deploys on its own, Heystack needs a public https address. A Cloudflare Tunnel does that without opening any port on your router. You need a free Cloudflare account and a domain whose DNS is on Cloudflare. (No domain? Tailscale Funnel or ngrok work too: Heystack only needs *some* public https address.)
+
+1. In Cloudflare, open **Zero Trust**, **Networks**, **Tunnels**, **Create a tunnel**, choose **Cloudflared**, name it (for example `heystack`) and save.
+2. Choose your system (Debian, and **arm64** for a Raspberry Pi), copy the commands it shows into a terminal on the machine, and run them. They install `cloudflared` and start it as a service. Back on the page, the connector should show **Healthy**.
+3. On the **Public hostname** tab add a hostname: subdomain `heystack`, your domain, service **HTTP**, URL `localhost:3001` (use your port). Save. Cloudflare creates the DNS record for you.
+4. Tell Heystack its address. Edit `~/heystack/config/heystack.env` and set the two lines below (keep `API_HOST=127.0.0.1`: `cloudflared` connects from the same machine, so nothing else needs to reach Heystack), then `systemctl --user restart heystack`:
+
+   ```
+   HEYSTACK_ALLOWED_ORIGINS=https://heystack.example.com
+   HEYSTACK_URL=https://heystack.example.com
+   ```
+
+5. Sign-in: Heystack asks for your account at that address. You can also put **Cloudflare Access** in front (Zero Trust, Access, Applications). If you do, add a second policy for the path `/webhooks/git` with the action **Bypass** (include **Everyone**): GitHub cannot sign in, and it proves who it is with a signature that Heystack checks.
+6. In GitHub, open your repository, **Settings**, **Webhooks**, **Add webhook**: Payload URL `https://heystack.example.com/webhooks/git`, Content type `application/json`, the secret shown in Heystack's Git Sync form (Edit), events **Pushes** and **Pull requests**.
+7. Check: run `~/heystack/bin/heystack-doctor` (if the web app and the API have different public addresses, set `HEYSTACK_API_URL=https://...` in the settings file to the API's address, so the doctor checks the one GitHub's webhooks use). Its **Remote access** part says whether Heystack answers at the public address, whether `cloudflared` is running, and whether GitHub's webhooks can get through (and exactly what to change if Cloudflare Access is in the way).
+
+Heystack also catches a push whose webhook did not arrive (it compares with GitHub every few minutes and deploys after a short wait), so a tunnel that was down for a while only delays a deployment.
 
 ## Update
 
@@ -104,6 +138,8 @@ printf 'POSTGRES_PASSWORD=%s\n' "$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')"
 docker compose up -d
 docker compose logs heystack      # shows the one-time setup code for the first account
 ```
+
+Docker is the quickest way to try Heystack, and it keeps the registry, uptime checks of addresses, notifications and integrations. A container cannot see the project folders and processes on your machine, so **deploying projects to the machine itself (Git Sync, Pipeline, port checks) needs the installer** above; `docker/README.md` has the table of what works where.
 
 Then open http://localhost:3001. Settings (including the encryption key) and backups live in the `heystack-data` volume; doctor, backup, restore and key rotation work as described above, run through `docker compose exec` / `docker compose run --rm`. Update with `docker compose pull && docker compose up -d`. The full guide, including restore and key rotation commands, is [DOCKER.md](DOCKER.md).
 
