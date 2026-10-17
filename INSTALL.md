@@ -16,7 +16,7 @@ macOS and other systems: unpack the package and follow `README.txt` inside it to
 Download `heystack-<version>.tar.gz` and `SHA256SUMS` from https://github.com/widgemo/heystack-releases/releases (no account needed) and check them:
 
 ```bash
-VERSION=0.18.0    # the newest version is at the top of the releases page
+VERSION=0.19.0    # the newest version is at the top of the releases page
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/heystack-$VERSION.tar.gz
 curl -fsSLO https://github.com/widgemo/heystack-releases/releases/download/v$VERSION/SHA256SUMS
 sha256sum -c SHA256SUMS
@@ -85,7 +85,7 @@ By default Heystack answers on this machine only, which is safest. To open it fr
    ```
 
 5. Sign-in: Heystack asks for your account at that address. You can also put **Cloudflare Access** in front (Zero Trust, Access, Applications). If you do, add a second policy for the path `/webhooks/git` with the action **Bypass** (include **Everyone**): GitHub cannot sign in, and it proves who it is with a signature that Heystack checks.
-6. In GitHub, open your repository, **Settings**, **Webhooks**, **Add webhook**: Payload URL `https://heystack.example.com/webhooks/git`, Content type `application/json`, the secret shown in Heystack's Git Sync form (Edit), events **Pushes** and **Pull requests**.
+6. In GitHub, open your repository, **Settings**, **Webhooks**, **Add webhook**: Payload URL `https://heystack.example.com/webhooks/git`, Content type `application/json`, the secret from Heystack's **Git Sync** page (under **Webhook secrets**, press **Reveal secret**; a repository has one secret, shared by all its sync configs), events **Pushes** and **Pull requests**.
 7. Check: run `~/heystack/bin/heystack-doctor` (if the web app and the API have different public addresses, set `HEYSTACK_API_URL=https://...` in the settings file to the API's address, so the doctor checks the one GitHub's webhooks use). Its **Remote access** part says whether Heystack answers at the public address, whether `cloudflared` is running, and whether GitHub's webhooks can get through (and exactly what to change if Cloudflare Access is in the way).
 
 Heystack also catches a push whose webhook did not arrive (it compares with GitHub every few minutes and deploys after a short wait), so a tunnel that was down for a while only delays a deployment.
