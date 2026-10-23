@@ -52,7 +52,10 @@ flowchart LR
   branch, and a timeline of what shipped (tags, merges to main, Vercel production deploys).
 - **Git Sync deployments** with a visible history, logs, a queue that runs one deployment at a time per checkout, and
   verification steps.
-- **Messages** to ntfy (your phone) or a signed webhook when a deploy fails or a project goes down.
+- **Backups you can see**: tell Heystack how often a backup, database dump or cron task should succeed and it shows, per
+  project, whether it did, how big it was and how old it is, whatever tool makes it ([JOBS.md](JOBS.md)). It only watches;
+  it never runs or restores anything.
+- **Messages** to ntfy (your phone) or a signed webhook when a deploy fails, a project goes down or a backup is overdue.
 - **For agents and scripts**: access tokens limited to *read* or *read and deploy*, an OpenAPI description of the API, and
   `heystack deploy` / `heystack runs` with `--json` ([AGENTS.md](AGENTS.md)).
 - **Optional AI questions** about your projects, answered by Claude with your own API key (off by default).
@@ -105,6 +108,7 @@ new version does not start), or `docker compose pull && docker compose up -d`.
 - [INSTALL.md](INSTALL.md): requirements, install, update, reaching it from anywhere, backups and restore, key rotation
 - [DOCKER.md](DOCKER.md): running with Docker Compose, and what works in a container
 - [AGENTS.md](AGENTS.md): using Heystack from an AI agent or a script (tokens, the API, the command line)
+- [JOBS.md](JOBS.md): watching your backups, database dumps and scheduled jobs (restic, borg, rsync, cron, any tool)
 - [LIMITATIONS.md](LIMITATIONS.md): what Heystack does not do (yet)
 - [FAQ.md](FAQ.md)
 - [BETA.md](BETA.md): what to try and how to tell us what is wrong

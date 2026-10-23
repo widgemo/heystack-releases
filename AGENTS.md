@@ -94,6 +94,20 @@ heystack runs my-api --limit 5 --json
 If a project has more than one Git Sync (for example one per repository), say which with `--repo docs` or
 `--branch dev`; `heystack deploy` never guesses.
 
+## Are my backups fine?
+
+Heystack can watch backups and scheduled jobs ([JOBS.md](JOBS.md)). A read-only token is enough to ask:
+
+```
+heystack jobs --json               # every job: status, last success, size, which projects it covers
+heystack jobs --check              # exit code 1 when a job failed or is overdue
+curl -H "Authorization: Bearer $HEYSTACK_TOKEN" http://localhost:3001/jobs
+```
+
+`status` is `OK`, `FAILED`, `OVERDUE` or `UNKNOWN` (waiting for a first run), with `statusDetail` in words. Creating or
+changing a job, and *check now* (which can run a command), need full access. A script reports a job's result with the
+job's own token, not an access token.
+
 ## Let Heystack tell the agent (events)
 
 Instead of asking again and again, add a **webhook** channel in **Settings, General, Notifications**. Heystack then
