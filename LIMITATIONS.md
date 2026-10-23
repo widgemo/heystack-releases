@@ -28,6 +28,7 @@ roadmap; the rest are choices.
 - **A Docker install is the dashboard, not the deployer.** A container cannot see your project folders, so Git Sync
   deployments, Pipeline, port checks of your apps and the scanner need the installer. [DOCKER.md](DOCKER.md) has the table.
 - **Watching backups needs the same machine, or a report.** Heystack only *watches* backups and jobs (it never runs or restores them). Looking at a folder, a status file or a command works for the installer; a Docker install cannot see the host, so a job there reports in itself with `curl` ([JOBS.md](JOBS.md)).
+- **Host health is for the native install.** Inside a Docker container the disk, drives and temperature belong to the container, so the Host page says it is not available and collects nothing. Temperature and the power and throttling flags are read from the Raspberry Pi (and any machine that reports a CPU temperature); other machines simply do not show them.
 - **PostgreSQL is required** (15 or newer). The installer can set it up on Debian, Ubuntu and Raspberry Pi OS; there is no
   SQLite option.
 - **The installer is for Linux with systemd.** On macOS you start the package by hand; Windows is not supported.

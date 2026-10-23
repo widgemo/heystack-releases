@@ -108,6 +108,17 @@ curl -H "Authorization: Bearer $HEYSTACK_TOKEN" http://localhost:3001/jobs
 changing a job, and *check now* (which can run a command), need full access. A script reports a job's result with the
 job's own token, not an access token.
 
+## Is the machine fine?
+
+```
+heystack host --json       # disks, watched drives, temperature, restart needed, each with a sentence
+heystack host --check      # exit code 1 when something needs attention
+curl -H "Authorization: Bearer $HEYSTACK_TOKEN" http://localhost:3001/host
+```
+
+A read-only token is enough. `severity` is `ok`, `warn`, `crit` or `info` (a restart that is needed, or updates waiting, is
+information); `failing` says whether the condition is wrong. Changing what is watched needs full access.
+
 ## Let Heystack tell the agent (events)
 
 Instead of asking again and again, add a **webhook** channel in **Settings, General, Notifications**. Heystack then

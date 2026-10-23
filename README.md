@@ -55,7 +55,11 @@ flowchart LR
 - **Backups you can see**: tell Heystack how often a backup, database dump or cron task should succeed and it shows, per
   project, whether it did, how big it was and how old it is, whatever tool makes it ([JOBS.md](JOBS.md)). It only watches;
   it never runs or restores anything.
-- **Messages** to ntfy (your phone) or a signed webhook when a deploy fails, a project goes down or a backup is overdue.
+- **The machine itself**: disk, memory, CPU temperature, Raspberry Pi power trouble, a restart that is needed, and drives that must
+  be mounted (such as a NAS share for backups), on a Host page, with a message when a disk fills or a drive is gone.
+  Everything is switchable, and it only reads.
+- **Messages** to ntfy (your phone) or a signed webhook when a deploy fails, a project goes down, a backup is overdue or the
+  machine has a problem.
 - **For agents and scripts**: access tokens limited to *read* or *read and deploy*, an OpenAPI description of the API, and
   `heystack deploy` / `heystack runs` with `--json` ([AGENTS.md](AGENTS.md)).
 - **Optional AI questions** about your projects, answered by Claude with your own API key (off by default).
