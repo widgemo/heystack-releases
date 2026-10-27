@@ -119,6 +119,18 @@ curl -H "Authorization: Bearer $HEYSTACK_TOKEN" http://localhost:3001/host
 A read-only token is enough. `severity` is `ok`, `warn`, `crit` or `info` (a restart that is needed, or updates waiting, is
 information); `failing` says whether the condition is wrong. Changing what is watched needs full access.
 
+## Is it a good moment to restart?
+
+```
+heystack ready --json      # { safe, blockers, restartNeeded }
+heystack ready && sudo reboot
+curl -H "Authorization: Bearer $HEYSTACK_TOKEN" http://localhost:3001/host/readiness
+```
+
+`safe` is false while a deployment is running or queued or Heystack is running a job check; `blockers` says which. The exit
+code of `heystack ready` is 1 when it is not safe. Heystack never restarts the machine, and cannot see a backup or another
+program that runs outside Heystack. A read-only token is enough.
+
 ## Let Heystack tell the agent (events)
 
 Instead of asking again and again, add a **webhook** channel in **Settings, General, Notifications**. Heystack then
