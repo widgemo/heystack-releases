@@ -192,7 +192,7 @@ agent you would trust with a login. Deploying still needs the project to allow i
 **Settings, General, Agent access**), and whether tokens may deploy a project is never something an agent can change.
 
 A typical deployment, as the agent does it: `list_projects` to find the runbook id, `start_run` with that id (answers at
-once), then `get_run` with `wait_seconds: 60` until `finished` is true, then `get_run_logs` if it failed. If the run is
+once), then `get_run` with `wait_seconds: 45` (the most it waits; a larger value is treated as 45, which keeps the call inside an agent's tool timeout of about 60 seconds) until `finished` is true, then `get_run_logs` if it failed. If the run is
 Heystack's own deployment, Heystack restarts while it runs and the waiting request may fail: ask again a few seconds
 later. When a tool is refused the agent gets the same plain sentence as the `/api/v1` routes give, for example which
 permission to add.
@@ -244,6 +244,20 @@ curl -H "Authorization: Bearer $HEYSTACK_TOKEN" http://localhost:3001/host
 
 A read-only token is enough. `severity` is `ok`, `warn`, `crit` or `info` (a restart that is needed, or updates waiting, is
 information); `failing` says whether the condition is wrong. Changing what is watched needs full access.
+
+To see a trend rather than the moment (memory pressure building, an SD card stalling, a network interface that stopped
+receiving), ask for the history. Both calls need only a read-only token:
+
+```
+curl -H "Authorization: Bearer $HEYSTACK_TOKEN" "http://localhost:3001/host/metrics?range=6h&series=memAvailableMin,psiMemFullMax,busyPctMax,tempCMax"
+curl -H "Authorization: Bearer $HEYSTACK_TOKEN" "http://localhost:3001/host/events?range=24h"
+```
+
+`/host/metrics` answers with `t` (times, epoch seconds) and one list of numbers per value, the same length, with `null`
+where nothing was recorded; `host` has the machine-wide values, `devices` the SD card, disks and network interfaces.
+`range` is `1h`, `6h`, `24h` (default), `7d` or `30d`. `/host/events` lists link changes, restarts and, where Heystack may
+read the system logs, watchdog resets, kernel hung-task and SD card errors and out-of-memory kills; check `logs` before
+reading "no events" as "nothing happened".
 
 ## Are my processes fine?
 
